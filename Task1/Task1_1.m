@@ -9,7 +9,7 @@ clc;
 load("fe_model.mat");
 
 %% TASK 1
-dimension = 2; %Sobre quina dimensió s'aplica la gravetat
+dimension = 1; %Sobre quina dimensió s'aplica la gravetat
 
 DoF = 6;
 nodes_fix = [10735; 13699; 16620; 19625; 22511; 4747];
