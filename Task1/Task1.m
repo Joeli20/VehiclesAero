@@ -8,6 +8,9 @@ clc;
 
 load("fe_model.mat");
 
+%% TASK 1
+dimension = 2; %Sobre quina dimensió s'aplica la gravetat
+
 DoF = 6;
 nodes_fix = [10735; 13699; 16620; 19625; 22511; 4747];
 
@@ -15,6 +18,9 @@ nodes_fix = [10735; 13699; 16620; 19625; 22511; 4747];
 fixnodes = zeros(size(nodes_fix,1)*DoF,3);
 posicio = zeros(size(nodes_fix,1),1);
 in_D = zeros(size(nodes_fix,1)*DoF,1);
+
+% VALORS GENERALS
+g = 9.81e3;
 
 % FIXNODES
 for i = 1:size(nodes_fix,1)
@@ -48,3 +54,20 @@ K_DD = K(in_D,in_D);
 K_NN = K(in_N,in_N);
 K_DN = K(in_D,in_N);
 K_ND = K(in_N,in_D);
+
+% Calcul u_D
+u_D = fixnodes(:,3);
+
+% Calcul F_N
+F = zeros(size(n_tot,2),1);
+
+for i=1:(size(F,1)/6)
+    F(dimension+6*(i-1)) = M(i,i)*g;
+end
+
+F_N = F(in_N);
+
+% CALCULATIONS
+
+u_N = K_NN\(F_N - K_ND * u_D);
+F_D = K_DD * u_D + K_DN * u_N;
