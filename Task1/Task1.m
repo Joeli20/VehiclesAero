@@ -62,7 +62,7 @@ u_D = fixnodes(:,3);
 F = zeros(size(n_tot,2),1);
 
 for i=1:(size(F,1)/6)
-    F(dimension+6*(i-1)) = M(i,i)*g;
+    F(dimension+6*(i-1)) = M(dimension+6*(i-1),dimension+6*(i-1))*g;
 end
 
 F_N = F(in_N);
@@ -71,3 +71,17 @@ F_N = F(in_N);
 
 u_N = K_NN\(F_N - K_ND * u_D);
 F_D = K_DD * u_D + K_DN * u_N;
+
+F_D = reshape(F_D,[6,6]);
+
+% MASS COMPROVATION
+
+true_mass=0;
+
+for i=1:(size(F,1)/6)
+   true_mass = true_mass + M(dimension+6*(i-1),dimension+6*(i-1))*g;
+end
+
+calc_mass = sum(F_D(2,:));
+
+error = true_mass+calc_mass;
