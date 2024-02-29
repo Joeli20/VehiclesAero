@@ -9,7 +9,10 @@ clc;
 load("fe_model.mat");
 
 %% TASK 1
-dimension = 2; %Sobre quina dimensió s'aplica la gravetat
+dimension = 2; %Dimensio sobre la qual s'aplica el desplaçament del node a causa de la shim
+support2disp = 1:6; %Suport sobre el qual s'aplica el desplaçament
+refNode = 1305;
+refNodeDof = 6*(refNode-1)+1;
 
 DoF = 6;
 nodes_fix = [10735; 13699; 16620; 19625; 22511; 4747];
@@ -20,7 +23,7 @@ posicio = zeros(size(nodes_fix,1),1);
 in_D = zeros(size(nodes_fix,1)*DoF,1);
 
 % VALORS GENERALS
-g = 9.81e3;
+g = 0;
 
 % FIXNODES
 for i = 1:size(nodes_fix,1)
@@ -55,33 +58,43 @@ K_NN = K(in_N,in_N);
 K_DN = K(in_D,in_N);
 K_ND = K(in_N,in_D);
 
-% Calcul u_D
-u_D = fixnodes(:,3);
+u_RefNode = zeros(size(support2disp));
 
-% Calcul F_N
-F = zeros(size(n_tot,2),1);
+for i=1:length(support2disp)
 
-for i=1:(size(F,1)/6)
-    F(dimension+6*(i-1)) = M(dimension+6*(i-1),dimension+6*(i-1))*g;
+    fixnodes(:,3) = 0;
+
+    % Imposició del desplaçament causat per una shim a una pota
+    fixnodes(6*(support2disp(i)-1) + dimension,3) = -1;
+
+    % Calcul u_D
+    u_D = fixnodes(:,3);
+
+    % Calcul F_N
+    F = zeros(size(n_tot,2),1);
+
+    for j=1:(size(F,1)/6)
+        F(dimension+6*(j-1)) = M(dimension+6*(j-1),dimension+6*(j-1))*g;
+    end
+
+    F_N = F(in_N);
+
+    % CALCULATIONS
+
+    u_N = K_NN\(F_N - K_ND * u_D);
+    F_D = K_DD * u_D + K_DN * u_N;
+
+    % Reference Node Displacement
+
+    posRef = find(in_N==refNodeDof);
+    u_RefNode(i,:) = u_N(posRef:(posRef+5));
 end
+clear i
 
-F_N = F(in_N);
+% System resolution
 
-% CALCULATIONS
+TargetDisp = [0; 0; 0; 0.5; 0; -0.2];
 
-u_N = K_NN\(F_N - K_ND * u_D);
-F_D = K_DD * u_D + K_DN * u_N;
+u_RefNode = transpose(u_RefNode);
 
-F_D = reshape(F_D,[6,6]);
-
-% MASS COMPROVATION
-
-true_mass=0;
-
-for i=1:(size(F,1)/6)
-   true_mass = true_mass + M(dimension+6*(i-1),dimension+6*(i-1))*g;
-end
-
-calc_mass = sum(F_D(2,:));
-
-error = true_mass+calc_mass;
+Shims = u_RefNode\TargetDisp;
