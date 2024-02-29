@@ -43,3 +43,8 @@ clear i
 n_tot = 1:size(K,1); % Dummy vector d'1 a Nod*DoF
 in_N = setdiff(n_tot,in_D); % Neumann Index
 
+% Calcul de les K segregades
+K_DD = K(in_D,in_D);
+K_NN = K(in_N,in_N);
+K_DN = K(in_D,in_N);
+K_ND = K(in_N,in_D);
