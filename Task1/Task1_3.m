@@ -8,7 +8,7 @@ clc;
 
 load("fe_model.mat");
 
-%% TASK 1
+%% TASK 1_1
 dimension = 2; %Sobre quina dimensió s'aplica la gravetat
 
 DoF = 6;
@@ -85,3 +85,71 @@ end
 calc_mass = sum(F_D(2,:));
 
 error = true_mass+calc_mass;
+
+%% TASK 1_3 EIGENMODES
+
+M_DD = M(in_D,in_D);
+M_NN = M(in_N,in_N);
+M_DN = M(in_D,in_N);
+M_ND = M(in_N,in_D);
+
+N_mod = 5;
+
+[V_r,D_r] = eigs(K_NN,M_NN,N_mod,'smallestabs');
+[V_u,D_u] = eigs(K,M,(N_mod+DoF),'smallestabs');
+
+eig_val_r = diag(D_r); % Eigenvalues restricted
+eig_val_u = diag(D_u); % Eigenvalues unconstrained
+
+[eig_val_r,ordre_r] = sort(eig_val_r); % Endreçar de menor a major
+V_r = V_r(:,ordre_r); % Endreçar amb el mateix ordre
+
+[eig_val_u,ordre_u] = sort(eig_val_u); % Endreçar de menor a major
+V_u = V_u(:,ordre_u); % Endreçar amb el mateix ordre
+
+eig_mod_r = V_r(:,1:N_mod); % Eigenmodes collected. En el nostre cas V=eig_mod 
+                        % pero preparem per cas general que haguem extret 
+                        % més i volguem uns en concret
+eig_mod_u = V_u(:,(DoF+1):(N_mod+DoF));
+
+
+freq_r = sqrt(eig_val_r)/(2*pi); 
+freq_u = sqrt(eig_val_u)/(2*pi);
+
+% Preparing to Plot RESTRICTED
+u_restr = zeros((size(K,1)/DoF)-6,DoF,N_mod);
+
+for n = 1:N_mod
+    for i = 1:((size(K,1)/DoF)-6)
+        for j = 1:DoF
+            u_restr(i,j,n) = eig_mod_r(j+(i-1)*6,n);
+        end
+    end
+end
+
+clear i j n;
+
+fillhdf('template.h5','restricted_1.h5',u_restr(:,:,1));
+fillhdf('template.h5','restricted_2.h5',u_restr(:,:,2));
+fillhdf('template.h5','restricted_3.h5',u_restr(:,:,3));
+fillhdf('template.h5','restricted_4.h5',u_restr(:,:,4));
+fillhdf('template.h5','restricted_5.h5',u_restr(:,:,5));
+
+% Preparing to Plot UNCONSTRAINED
+u_unconst = zeros((size(K,1)/DoF)-6,DoF,N_mod);
+
+for n = 1:N_mod
+    for i = 1:((size(K,1)/DoF)-6)
+        for j = 1:DoF
+            u_unconst(i,j,n) = eig_mod_u(j+(i-1)*6,n);
+        end
+    end
+end
+ 
+fillhdf('template.h5','restricted_1.h5',u_unconst(:,:,1));
+fillhdf('template.h5','restricted_2.h5',u_unconst(:,:,2));
+fillhdf('template.h5','restricted_3.h5',u_unconst(:,:,3));
+fillhdf('template.h5','restricted_4.h5',u_unconst(:,:,4));
+fillhdf('template.h5','restricted_5.h5',u_unconst(:,:,5));
+
+clear i j n;
