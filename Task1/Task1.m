@@ -6,4 +6,3 @@ clc;
 % Vehicles Aeroespacials. MUEA.
 % Task 1: Matrix structural analysis of a optical mount
 
-M=2;
