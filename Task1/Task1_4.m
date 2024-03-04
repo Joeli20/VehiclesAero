@@ -8,8 +8,8 @@ clc;
 
 load("fe_model.mat");
 
-%% TASK 1
-dimension = 1; %Sobre quina dimensió s'aplica la gravetat
+%% TASK 1_1
+dimension = 2; %Sobre quina dimensió s'aplica la gravetat
 
 DoF = 6;
 nodes_fix = [10735; 13699; 16620; 19625; 22511; 4747];
@@ -85,3 +85,27 @@ end
 calc_mass = sum(F_D(2,:));
 
 error = true_mass+calc_mass;
+
+%% TASK 4
+
+M_DD = M(in_D,in_D);
+M_NN = M(in_N,in_N);
+M_DN = M(in_D,in_N);
+M_ND = M(in_N,in_D);
+
+dump_rat = 0.02; % 2%
+freq = 0:2000;
+w = 2*pi*freq;
+
+N_mod = 5; % Review
+
+[V_r,D_r] = eigs(K_NN,M_NN,N_mod,'smallestabs');
+
+eig_val_r = diag(D_r); % Eigenvalues restricted
+
+[eig_val_r,ordre_r] = sort(eig_val_r); % Endreçar de menor a major
+V_r = V_r(:,ordre_r); % Endreçar amb el mateix ordre
+
+eig_mod_r = V_r(:,1:N_mod); % Eigenmodes collected.
+
+freq_r = sqrt(eig_val_r)/(2*pi); 
