@@ -117,10 +117,11 @@ freq_r = sqrt(eig_val_r)/(2*pi);
 freq_u = sqrt(eig_val_u)/(2*pi);
 
 % Preparing to Plot RESTRICTED
-u_restr = zeros((size(K,1)/DoF)-6,DoF,N_mod);
+u_restr = zeros((size(K,1)/DoF),DoF,N_mod);
 
+k = 1;
 for n = 1:N_mod
-    for i = 1:((size(K,1)/DoF)-6)
+    for i = 1:(size(K,1)/DoF)-(size(nodes_fix,1)+1)
         for j = 1:DoF
             u_restr(i,j,n) = eig_mod_r(j+(i-1)*6,n);
         end
@@ -136,20 +137,20 @@ fillhdf('template.h5','restricted_4.h5',u_restr(:,:,4));
 fillhdf('template.h5','restricted_5.h5',u_restr(:,:,5));
 
 % Preparing to Plot UNCONSTRAINED
-u_unconst = zeros((size(K,1)/DoF)-6,DoF,N_mod);
+u_unconst = zeros((size(K,1)/DoF),DoF,N_mod);
 
 for n = 1:N_mod
-    for i = 1:((size(K,1)/DoF)-6)
+    for i = 1:(size(K,1)/DoF)
         for j = 1:DoF
             u_unconst(i,j,n) = eig_mod_u(j+(i-1)*6,n);
         end
     end
 end
  
-fillhdf('template.h5','restricted_1.h5',u_unconst(:,:,1));
-fillhdf('template.h5','restricted_2.h5',u_unconst(:,:,2));
-fillhdf('template.h5','restricted_3.h5',u_unconst(:,:,3));
-fillhdf('template.h5','restricted_4.h5',u_unconst(:,:,4));
-fillhdf('template.h5','restricted_5.h5',u_unconst(:,:,5));
+fillhdf('template.h5','unconstrained_1.h5',u_unconst(:,:,1));
+fillhdf('template.h5','unconstrained_2.h5',u_unconst(:,:,2));
+fillhdf('template.h5','unconstrained_3.h5',u_unconst(:,:,3));
+fillhdf('template.h5','unconstrained_4.h5',u_unconst(:,:,4));
+fillhdf('template.h5','unconstrained_5.h5',u_unconst(:,:,5));
 
 clear i j n;
