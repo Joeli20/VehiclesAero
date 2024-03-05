@@ -76,7 +76,14 @@ F_D = reshape(F_D,[6,6]);
 
 % PLOT META
 
-u_N_r = transpose(reshape(u_N,6,length(u_N)/6));
+u_N_T = zeros(size(F,1),1);
+
+for i=1:length(u_N)
+    k = in_N(i);
+    u_N_T(k) = u_N(i);
+end
+
+u_N_r = transpose(reshape(u_N_T,6,length(u_N_T)/6));
 
 fillhdf('template.h5','exercise_1_X.h5',u_N_r);
 
