@@ -88,6 +88,11 @@ error = true_mass+calc_mass;
 
 %% TASK 4
 
+Nod_ref = 1305;
+
+F_ext = zeros(size(K_NN,1),1);
+F_ext((Nod_ref-1)*6 + 1,1) = g;
+
 M_DD = M(in_D,in_D);
 M_NN = M(in_N,in_N);
 M_DN = M(in_D,in_N);
@@ -95,7 +100,7 @@ M_ND = M(in_N,in_D);
 
 dump_rat = 0.02; % 2%
 freq = 0:2000;
-w = 2*pi*freq;
+omega = 2*pi*freq;
 
 N_mod = 5; % Review
 
@@ -109,3 +114,36 @@ V_r = V_r(:,ordre_r); % Endreçar amb el mateix ordre
 eig_mod_r = V_r(:,1:N_mod); % Eigenmodes collected.
 
 freq_r = sqrt(eig_val_r)/(2*pi); 
+
+M_mod = eig_mod_r' * M_NN * eig_mod_r; % Transp * M * eig
+
+K_DD = (1 + dump_rat*sqrt(-1)) * K_NN;
+K_mod = eig_mod_r' * K_DD * eig_mod_r; % Transp * K * eig
+
+f_mod = eig_mod_r' * F_ext;
+
+for i = length(omega)
+    Q_mod = -(omega(i)^2) * M_mod * K_mod;
+    X_i = Q_mod \ f_mod;
+    X_barret = eig_mod_r * X_i;
+    X_tot(i) = X_barret((Nod_ref-1)*6 + 1);
+end
+
+X_mod = abs(X_tot);
+X_ang = angle(X_tot);
+
+figure
+hold on
+plot(freq, X_mod);
+xlabel('Freqüència (Hz)')
+ylabel('Amplitud (mm)')
+grid on
+hold off
+
+figure
+hold on
+plot(freq, -1*X_ang);
+xlabel('Freqüència (Hz)')
+ylabel('Fase (rad)')
+grid on
+hold off

@@ -74,6 +74,14 @@ F_D = K_DD * u_D + K_DN * u_N;
 
 F_D = reshape(F_D,[6,6]);
 
+u1 = zeros(size(n_tot,2),1);
+for i = 1:((size(n_tot,2)/DoF)-DoF)
+    u1(i) = u_N(6*(i-1)+1);
+end
+
+u1 = reshape(u1,[25390,6]);
+fillhdf('template.h5','static_X.h5',u1); % Plot META
+
 % MASS COMPROVATION
 
 true_mass=0;
@@ -85,9 +93,3 @@ end
 calc_mass = sum(F_D(2,:));
 
 error = true_mass+calc_mass;
-
-% PLOT META
-
-u_N_r = transpose(reshape(u_N,6,length(u_N)/6));
-
-fillhdf('template.h5','exercise_1_X.h5',u_N_r);
