@@ -65,7 +65,7 @@ for i=1:length(support2disp)
     fixnodes(:,3) = 0;
 
     % Imposició del desplaçament causat per una shim a una pota
-    fixnodes(6*(support2disp(i)-1) + dimension,3) = -1;
+    fixnodes(6*(support2disp(i)-1) + dimension,3) = 1;
 
     % Calcul u_D
     u_D = fixnodes(:,3);
@@ -93,8 +93,30 @@ clear i
 
 % System resolution
 
-TargetDisp = [0; 0; 0; 0.5; 0; -0.2];
+TargetDisp = [0; 0; 0; 0.0005; 0; -0.0002];
 
 u_RefNode = transpose(u_RefNode);
 
 Shims = u_RefNode\TargetDisp;
+
+% Result Comprovation
+
+u_D2 = zeros(length(nodes_fix)*DoF,1);
+F2 = zeros(size(n_tot,2),1);
+
+for i=1:length(support2disp)
+    u_D2(6*(support2disp(i)-1) + dimension) = Shims(i);
+end
+clear i
+
+for j=1:(size(F2,1)/6)
+    F2(dimension+6*(j-1)) = M(dimension+6*(j-1),dimension+6*(j-1))*g;
+end
+clear j
+
+F2_N = F2(in_N);
+
+u_N2 = K_NN\(F2_N - K_ND * u_D2);
+F_D2 = K_DD * u_D2 + K_DN * u_N;
+
+u_RefNode2 = u_N2(posRef:(posRef+5));
