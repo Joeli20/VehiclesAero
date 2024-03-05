@@ -85,3 +85,9 @@ end
 calc_mass = sum(F_D(2,:));
 
 error = true_mass+calc_mass;
+
+% PLOT META
+
+u_N_r = transpose(reshape(u_N,6,length(u_N)/6));
+
+fillhdf('template.h5','exercise_1_X.h5',u_N_r);
