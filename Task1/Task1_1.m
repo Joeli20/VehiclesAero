@@ -12,6 +12,8 @@ load("fe_model.mat");
 dimension = 1; %Sobre quina dimensió s'aplica la gravetat
 
 DoF = 6;
+refNode = 1305;
+refNodeDof = 6*(refNode-1)+1;
 nodes_fix = [10735; 13699; 16620; 19625; 22511; 4747];
 
 % PREALLOCATING
@@ -71,6 +73,9 @@ F_N = F(in_N);
 
 u_N = K_NN\(F_N - K_ND * u_D);
 F_D = K_DD * u_D + K_DN * u_N;
+
+posRef = find(in_N==refNodeDof);
+u_RefNode = u_N(posRef:(posRef+5));
 
 F_D = reshape(F_D,[6,6]);
 
