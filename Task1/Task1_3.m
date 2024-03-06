@@ -8,7 +8,7 @@ clc;
 
 load("fe_model.mat");
 
-%% TASK 1_1
+%% PRE TASK
 dimension = 2; %Sobre quina dimensió s'aplica la gravetat
 
 DoF = 6;
@@ -54,37 +54,6 @@ K_DD = K(in_D,in_D);
 K_NN = K(in_N,in_N);
 K_DN = K(in_D,in_N);
 K_ND = K(in_N,in_D);
-
-% Calcul u_D
-u_D = fixnodes(:,3);
-
-% Calcul F_N
-F = zeros(size(n_tot,2),1);
-
-for i=1:(size(F,1)/6)
-    F(dimension+6*(i-1)) = M(dimension+6*(i-1),dimension+6*(i-1))*g;
-end
-
-F_N = F(in_N);
-
-% CALCULATIONS
-
-u_N = K_NN\(F_N - K_ND * u_D);
-F_D = K_DD * u_D + K_DN * u_N;
-
-F_D = reshape(F_D,[6,6]);
-
-% MASS COMPROVATION
-
-true_mass=0;
-
-for i=1:(size(F,1)/6)
-   true_mass = true_mass + M(dimension+6*(i-1),dimension+6*(i-1))*g;
-end
-
-calc_mass = sum(F_D(2,:));
-
-error = true_mass+calc_mass;
 
 %% TASK 1_3 EIGENMODES
 

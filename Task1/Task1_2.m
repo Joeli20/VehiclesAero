@@ -8,7 +8,7 @@ clc;
 
 load("fe_model.mat");
 
-%% TASK 1
+%% TASK 2
 dimension = 2; %Dimensio sobre la qual s'aplica el desplaçament del node a causa de la shim
 support2disp = 1:6; %Suport sobre el qual s'aplica el desplaçament
 refNode = 1305;

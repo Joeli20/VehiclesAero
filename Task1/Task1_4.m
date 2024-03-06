@@ -8,7 +8,7 @@ clc;
 
 load("fe_model.mat");
 
-%% TASK 1_1
+%% PRE TASK
 dimension = 2; %Sobre quina dimensió s'aplica la gravetat
 
 DoF = 6;
@@ -126,10 +126,10 @@ hold off
 
 figure
 hold on
-plot(freq, -1*X_ang);
+plot(freq, X_ang);
 xlabel('Freqüència (Hz)')
 ylabel('Fase (rad)')
-title('Angles')
+title('Desfasament')
 legend('Mode 1','Mode 2','Mode 3','Mode 4','Mode 5')
 grid on
 hold off

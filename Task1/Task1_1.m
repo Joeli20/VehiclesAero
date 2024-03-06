@@ -90,8 +90,7 @@ end
 
 u_N_r = transpose(reshape(u_N_T,6,length(u_N_T)/6));
 
-%fillhdf('template.h5','exercise_1_X.h5',u_N_r);
-
+fillhdf('template.h5','exercise_1_X.h5',u_N_r);
 
 % MASS COMPROVATION
 
