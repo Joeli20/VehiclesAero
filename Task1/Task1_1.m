@@ -85,7 +85,7 @@ end
 
 u_N_r = transpose(reshape(u_N_T,6,length(u_N_T)/6));
 
-fillhdf('template.h5','exercise_1_X.h5',u_N_r);
+%fillhdf('template.h5','exercise_1_X.h5',u_N_r);
 
 
 % MASS COMPROVATION
@@ -96,6 +96,6 @@ for i=1:(size(F,1)/6)
    true_mass = true_mass + M(dimension+6*(i-1),dimension+6*(i-1))*g;
 end
 
-calc_mass = sum(F_D(2,:));
+calc_mass = sum(F_D(dimension,:));
 
 error = true_mass+calc_mass;
