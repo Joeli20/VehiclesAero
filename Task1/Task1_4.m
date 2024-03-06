@@ -12,7 +12,7 @@ load("fe_model.mat");
 dimension = 2; %Sobre quina dimensió s'aplica la gravetat
 
 DoF = 6;
-nodes_fix = [4747 10735 13699 16620 19625 22511];
+nodes_fix = [10735; 13699; 16620; 19625; 22511; 4747];
 
 % PREALLOCATING
 fixnodes = zeros(size(nodes_fix,1)*DoF,3);
@@ -59,15 +59,20 @@ K_ND = K(in_N,in_D);
 
 Nod_ref = 1305;
 
-F_ext = zeros(size(K_NN,1),1);
+F_ext = zeros(size(K,1),1);
 F_ext((Nod_ref-1)*6 + 1,1) = g;
+F_vec = M * F_ext;
+F_vec(in_D) = [];
 
 M_DD = M(in_D,in_D);
 M_NN = M(in_N,in_N);
 M_DN = M(in_D,in_N);
 M_ND = M(in_N,in_D);
 
-dump_rat = 0.02; % 2%
+K_NN = (K_NN + K_NN')/2;
+M_NN = (M_NN + M_NN')/2;
+
+damp_rat = 0.02; % 2%
 freq = 0:2000;
 omega = 2*pi*freq;
 
@@ -84,24 +89,30 @@ eig_mod = V(:,1:N_mod); % Eigenmodes collected.
 
 freq_eig = sqrt(eig_val); %OJO
 
-M_mod = eig_mod' * M_NN * eig_mod; % Transp * M * eig
+for i = 1:N_mod
+    X_total = zeros(length(omega),1);
+    eig_mod_ind = eig_mod(:,i);
+    for j = 1:length(omega)
+        F_mod = eig_mod_ind' * F_vec;
+        M_mod = eig_mod_ind' * M_NN * eig_mod_ind;
+        K_mod = eig_mod_ind' * K_NN * eig_mod_ind;
 
-K_DD = (1 + dump_rat*sqrt(-1)) * K_NN;
-K_mod = eig_mod' * K_DD * eig_mod; % Transp * K * eig
+        viscous = diag(2 * M_mod * freq_eig(i) * damp_rat);
 
-f_mod = eig_mod' * F_ext;
+        Q = -omega(j)^2 .* M_mod + K_mod; % Q+damp
+        Q = Q + (viscous * omega(j) * 1i);
 
-for i = length(omega)
-        Q_mod = -(omega(i)^2).* M_mod + K_mod;
-        X_i = Q_mod \ f_mod;
-        X_barret = eig_mod * X_i;
-        X_barret_total = zeros(size(M,1), 1);
-        X_barret_total(in_N) = X_barret;
-        X_total(i) = X_barret_total((Nod_ref-1)*6+1);
+        X = Q \ F_mod;
+
+        X_h = eig_mod_ind * X;
+        X_h_tot = zeros(size(M,1), 1);
+        X_h_tot(in_N) = X_h;
+        X_total(j) = X_h_tot((Nod_ref-1)*6+1);
+
+    end
+    X_mod(:,i) = abs(X_total);
+    X_ang(:,i) = angle(X_total);
 end
-
-X_mod = abs(X_total);
-X_ang = angle(X_total);
 
 figure
 hold on
