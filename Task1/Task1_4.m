@@ -12,7 +12,7 @@ load("fe_model.mat");
 dimension = 2; %Sobre quina dimensió s'aplica la gravetat
 
 DoF = 6;
-nodes_fix = [10735; 13699; 16620; 19625; 22511; 4747];
+nodes_fix = [4747 10735 13699 16620 19625 22511];
 
 % PREALLOCATING
 fixnodes = zeros(size(nodes_fix,1)*DoF,3);
@@ -55,37 +55,6 @@ K_NN = K(in_N,in_N);
 K_DN = K(in_D,in_N);
 K_ND = K(in_N,in_D);
 
-% Calcul u_D
-u_D = fixnodes(:,3);
-
-% Calcul F_N
-F = zeros(size(n_tot,2),1);
-
-for i=1:(size(F,1)/6)
-    F(dimension+6*(i-1)) = M(dimension+6*(i-1),dimension+6*(i-1))*g;
-end
-
-F_N = F(in_N);
-
-% CALCULATIONS
-
-u_N = K_NN\(F_N - K_ND * u_D);
-F_D = K_DD * u_D + K_DN * u_N;
-
-F_D = reshape(F_D,[6,6]);
-
-% MASS COMPROVATION
-
-true_mass=0;
-
-for i=1:(size(F,1)/6)
-   true_mass = true_mass + M(dimension+6*(i-1),dimension+6*(i-1))*g;
-end
-
-calc_mass = sum(F_D(2,:));
-
-error = true_mass+calc_mass;
-
 %% TASK 4
 
 Nod_ref = 1305;
@@ -104,39 +73,43 @@ omega = 2*pi*freq;
 
 N_mod = 5; % Review
 
-[V_r,D_r] = eigs(K_NN,M_NN,N_mod,'smallestabs');
+[V,D] = eigs(K_NN,M_NN,N_mod,'smallestabs');
 
-eig_val_r = diag(D_r); % Eigenvalues restricted
+eig_val = diag(D); % Eigenvalues restricted
 
-[eig_val_r,ordre_r] = sort(eig_val_r); % Endreçar de menor a major
-V_r = V_r(:,ordre_r); % Endreçar amb el mateix ordre
+[eig_val,ordre] = sort(eig_val); % Endreçar de menor a major
+V = V(:,ordre); % Endreçar amb el mateix ordre
 
-eig_mod_r = V_r(:,1:N_mod); % Eigenmodes collected.
+eig_mod = V(:,1:N_mod); % Eigenmodes collected.
 
-freq_r = sqrt(eig_val_r)/(2*pi); 
+freq_eig = sqrt(eig_val); %OJO
 
-M_mod = eig_mod_r' * M_NN * eig_mod_r; % Transp * M * eig
+M_mod = eig_mod' * M_NN * eig_mod; % Transp * M * eig
 
 K_DD = (1 + dump_rat*sqrt(-1)) * K_NN;
-K_mod = eig_mod_r' * K_DD * eig_mod_r; % Transp * K * eig
+K_mod = eig_mod' * K_DD * eig_mod; % Transp * K * eig
 
-f_mod = eig_mod_r' * F_ext;
+f_mod = eig_mod' * F_ext;
 
 for i = length(omega)
-    Q_mod = -(omega(i)^2) * M_mod * K_mod;
-    X_i = Q_mod \ f_mod;
-    X_barret = eig_mod_r * X_i;
-    X_tot(i) = X_barret((Nod_ref-1)*6 + 1);
+        Q_mod = -(omega(i)^2).* M_mod + K_mod;
+        X_i = Q_mod \ f_mod;
+        X_barret = eig_mod * X_i;
+        X_barret_total = zeros(size(M,1), 1);
+        X_barret_total(in_N) = X_barret;
+        X_total(i) = X_barret_total((Nod_ref-1)*6+1);
 end
 
-X_mod = abs(X_tot);
-X_ang = angle(X_tot);
+X_mod = abs(X_total);
+X_ang = angle(X_total);
 
 figure
 hold on
 plot(freq, X_mod);
 xlabel('Freqüència (Hz)')
 ylabel('Amplitud (mm)')
+title('Mòduls')
+legend('Mode 1','Mode 2','Mode 3','Mode 4','Mode 5')
 grid on
 hold off
 
@@ -145,5 +118,7 @@ hold on
 plot(freq, -1*X_ang);
 xlabel('Freqüència (Hz)')
 ylabel('Fase (rad)')
+title('Angles')
+legend('Mode 1','Mode 2','Mode 3','Mode 4','Mode 5')
 grid on
 hold off
