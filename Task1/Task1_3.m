@@ -110,6 +110,10 @@ V_u = V_u(:,ordre_u); % Endreçar amb el mateix ordre
 eig_mod_r = V_r(:,1:N_mod); % Eigenmodes collected. En el nostre cas V=eig_mod 
                         % pero preparem per cas general que haguem extret 
                         % més i volguem uns en concret
+
+eig_mod_r2 = zeros(size(K,1),5);
+eig_mod_r2(in_N,:) = eig_mod_r;
+
 eig_mod_u = V_u(:,(DoF+1):(N_mod+DoF));
 
 
@@ -121,9 +125,9 @@ u_restr = zeros((size(K,1)/DoF),DoF,N_mod);
 
 k = 1;
 for n = 1:N_mod
-    for i = 1:(size(K,1)/DoF)-(size(nodes_fix,1)+1)
+    for i = 1:size(K,1)/DoF
         for j = 1:DoF
-            u_restr(i,j,n) = eig_mod_r(j+(i-1)*6,n);
+                u_restr(i,j,n) = eig_mod_r2(j+(i-1)*6,n);
         end
     end
 end
