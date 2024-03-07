@@ -1,0 +1,156 @@
+MSC Nastran V2019FP1 (Intel Windows 10 Enterprise  6.2 9200) Control File: 
+----------------------------------------------------------------- 
+$ sysfield=SCR*(RAW=YES,BUFFIO=YES,wnum=16,wsize=16mb) $(c:/program files/msc.software/msc_nastran/2019fp1/conf/nast20191.rcf[2])
+$ sysfield=DBALL(RAW=YES,BUFFIO=YES,wnum=16,wsize=16mb) $(c:/program files/msc.software/msc_nastran/2019fp1/conf/nast20191.rcf[3])
+Nastran BUFFSIZE=32769 $(c:/program files/msc.software/msc_nastran/2019fp1/conf/nast20191.rcf[6])
+JID='h:/vehicles aeroespacials/task 2/nastran_headers_103.bdf'
+OUT='./nastran_headers_103'
+MEM=8126MB      $ 
+MACH='Intel'
+OPER='Windows 10 Enterprise '
+OSV='6.2 9200'
+MODEL='Xeon/6900 (ESEIAAT-18-9)'
+NPROC='12'
+CONFIG=6
+NPROC=12
+symbol=DELDIR='c:/program files/msc.software/msc_nastran/2019fp1/msc20191/nast/del' $(program default)
+symbol=DEMODIR='c:/program files/msc.software/msc_nastran/2019fp1/msc20191/nast/demo' $(program default)
+symbol=LM_NO_SNMP=1 $(c:/program files/msc.software/msc_nastran/2019fp1/conf/nast20191.rcf[10])
+symbol=MKL_INTERFACE_LAYER=ILP64 $(c:/program files/msc.software/msc_nastran/2019fp1/conf/nast20191.rcf[1])
+symbol=SSSALTERDIR='c:/program files/msc.software/msc_nastran/2019fp1/msc20191/nast/sssalter' $(program default)
+symbol=TPLDIR='c:/program files/msc.software/msc_nastran/2019fp1/msc20191/nast/tpl' $(program default)
+SDIR='c:/software/temp/nastran_headers_103.T4660_22'
+DBS='c:/software/temp/nastran_headers_103.T4660_22'
+SCR='yes'
+SMEM=100
+BPOOL=2031.6MB
+DMPMEM=estimate
+NEWDEL='c:/program files/msc.software/msc_nastran/2019fp1/msc20191/win64i8/sss'
+DEL='MSCDEF'
+DML=MSCDEF
+SDL=MSCDEF
+AUTH='27500@172.16.1.100'
+AUTHQUE=20
+MSGCAT='c:/program files/msc.software/msc_nastran/2019fp1/msc20191/win64i8/analysis.msg'
+MSGDEST='f06'
+NEWS='c:/program files/msc.software/msc_nastran/2019fp1/msc20191/nast/news.txt'
+----------------------------------------------------------------- 
+MSC_ISHELLPATH=C:\Program Files\MSC.Software\MSC_Nastran\2019fp1\msc20191\actran\win64\Actran_20.0.b.124632\bin;C:\Program Files\MSC.Software\MSC_Nastran\2019fp1\msc20191\nast; 
+MSC_JIDPATH= 
+PATH=c:\program files\msc.software\msc_nastran\2019fp1\msc20191\win64i8;c:\program files\msc.software\msc_nastran\2019fp1\msc20191\win64i8\nCode\bin;c:\program files\msc.software\msc_nastran\2019fp1\msc20191\win64i8\nvidia;c:\program files\msc.software\msc_nastran\2019fp1\msc20191\win64i8\lib;c:\program files\msc.software\msc_nastran\2019fp1\msc20191\win64i8;C:\Program Files\ImageMagick-7.1.1-Q16-HDRI;C:\Program Files\Volta\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\MATLAB\R2022b\bin;C:\Program Files\MATLAB\R2022b\bin\win64;C:\Program Files\Microsoft MPI\Bin\;C:\Software\Python\Python39\Scripts\;C:\Software\Python\Python39\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\Rockwell Software\RSCommon;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Aurel Systems\CADSIM Plus\BIN\;C:\Program Files\Microsoft VS Code\bin;C:\Software\cygwin64\bin;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;c:\software\flutter\bin;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\Bin\;C:\Program Files\IVI Foundation\VISA\Win64\Bin\;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\Bin;C:\Program Files\dotnet\;C:\Program Files\Siemens\NX2007\CAPITALINTEGRATION\capitalnxremote\;C:\Program Files\Oracle\VirtualBox;C:\Users\Administrator\AppData\Roaming\npm;C:\Program Files\nodejs\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files\Git\cmd;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\PowerShell\7\;C:\Users\Administrator\AppData\Local\Volta\bin;C:\Program Files\Oracle\VirtualBox;C:\Users\Administrator\AppData\Roaming\npm 
+SCA_SERVICE_CATALOG=c:\program files\msc.software\msc_nastran\2019fp1\msc20191\res\SCAServiceCatalog.xml 
+SCA_RESOURCE_DIR=c:\program files\msc.software\msc_nastran\2019fp1\msc20191\res 
+Cmd Line:    C:\Program Files\MSC.Software\MSC_Nastran\2019fp1\msc20191\win64i8\nastran.exe JID=H:\Vehicles Aeroespacials\Task 2\Nastran_Headers_103.bdf OLD=NO 
+Current Dir: H:\Vehicles Aeroespacials\Task 2 
+Time Cmd:    c:\program files\msc.software\msc_nastran\2019fp1\msc20191\win64i8\msctime 
+Executable:  c:\program files\msc.software\msc_nastran\2019fp1\msc20191\win64i8\analysis.exe 
+Arch= Kywd:  [Not specified]  
+MSC_MSG:     stderr  
+FPE:         yes  
+----------------------------------------------------------------- 
+Current resource limits:
+ Physical memory:                    16253 MB
+ Physical memory available:           9519 MB
+ Paging file size:                   18685 MB
+ Paging file size available:          7824 MB
+ Virtual memory:                 134217727 MB
+ Virtual memory available:       134213509 MB
+----------------------------------------------------------------- 
+System configuration:
+ Hostname:         ESEIAAT-18-9.upc-ct.upc.edu
+ Architecture:     win64i8
+ Platform:         Intel Windows 10 Enterprise  6.2 9200 (Windows Compute Cluster)
+ Model:            Xeon/3776
+ Clock freq.:      3939 MHz
+ Number of CPUs:   12
+ Executable:       standard
+ Raw model ID:     6
+ Config number:    6
+ Physical memory:  16253 MB
+ Virtual memory:   18685 MB
+ Numeric format:   64-bit little-endian IEEE.
+ Bytes per word:   8
+ Disk block size:  512 bytes (64 words)
+ Remote shell cmd: "c:/program files/msc.software/msc_nastran/2019fp1/msc20191/win64i8/mscrmtcmd.exe" (Windows non-CCS nodes, UNIX)
+                   <ccs_cmd> (Windows CCS nodes)
+----------------------------------------------------------------- 
+MSC Nastran started  Thu Mar  7 13:12:23 RST 2024 
+ 13:12:25  Beginning Analysis
+SCA Kernel 22.10.671911 successfully initialized
+BLAS/LAPACK .dll "c:\program files\msc.software\msc_nastran\2019fp1\msc20191\win64i8\libimalloc.dll" has been loaded.
+BLAS/LAPACK .dll "c:\program files\msc.software\msc_nastran\2019fp1\msc20191\win64i8\mkl_core.dll" has been loaded.
+BLAS/LAPACK .dll "c:\program files\msc.software\msc_nastran\2019fp1\msc20191\win64i8\mkl_intel_thread.dll" has been loaded.
+BLAS/LAPACK .dll "c:\program files\msc.software\msc_nastran\2019fp1\msc20191\win64i8\mkl_rt.dll" has been loaded.
+BLAS/LAPACK .dll "c:\program files\msc.software\msc_nastran\2019fp1\msc20191\win64i8\MSCblas.dll" has been loaded.
+
+ 13:12:28  MSC Authorization Information - System Attributes (1004, 0)
+ 13:12:28  -----------------------------------------------------------
+  Date:          Thu Mar  7 13:12:28 2024
+  MSC Id:        0a002700000a (ethernet) (Intel)
+  Hostname:      ESEIAAT-18-9 (user albert.chacon.baiges, display ESEIAAT-18-9)
+  License files: 27500@172.16.1.100
+  CEID:          0DD21251-7A33799A
+  User:          albert.chacon.baiges
+  Display:       ESEIAAT-18-9
+  LAPI Version:  LAPI 10.5.1 (CL 671685) (FLEXlm 11.16.3.0)
+
+  * * * * * * * * * * * * * * * * * * * *
+  * * * * * * * * * * * * * * * * * * * *
+  * *                                 * *
+  * *   MSC Customer Entitlement ID   * *
+  * *        0DD21251-7A33799A        * *
+  * *                                 * *
+  * * * * * * * * * * * * * * * * * * * *
+  * * * * * * * * * * * * * * * * * * * *
+
+ 13:12:30  MSC Authorization Information - Checkout Successful (1016, 0)
+ 13:12:30  -------------------------------------------------------------
+ 13:12:30  Acquired 1 license for MSC Nastran from license server on host 172.16.1.100
+
+
+Beginning bulk data processing using the IFPStar component.
+For more information on IFPStar, please see KB article KB8019200
+on our support pages, at http://simcompanion.mscsoftware.com.
+
+ 13:12:30  78 records read from JID file "h:/vehicles aeroespacials/task 2/nastran_headers_103.bdf"
+
+Processing of bulk data entries is complete.
+
+ 13:12:30  Analysis started.
+ 13:12:30  Geometry access/verification to CAD part initiated (if needed).
+ 13:12:30  Geometry access/verification to CAD part successfully completed (if needed).
+ 13:12:30  Finite element model generation started.
+ 13:12:30  Finite element model generated 72 degrees of freedom.
+ 13:12:30  Finite element model generation successfully completed.
+ 13:12:30  Application of Loads and Boundary Conditions to the finite element model started.
+ 13:12:31  Application of Loads and Boundary Conditions to the finite element model successfully completed.
+ 13:12:31  Solution of the system equations for normal modes started.
+ 13:12:31  Solution of the system equations for normal modes successfully completed.
+ 13:12:31  Normal modes analysis completed.
+ 13:12:31  24 records read from JID file "h:/vehicles aeroespacials/task 2/nastran_headers_103.bdf"
+ 13:12:31  NSEXIT: EXIT(0)
+ 13:12:31  Analysis complete  0
+Real:        6.067 seconds ( 0:00:06.067)
+User:        0.359 seconds ( 0:00:00.359)
+Sys:         0.156 seconds ( 0:00:00.156)
+ ==================================================
+ OS:              6.2
+ OEM ID:         9
+ Number of processors:         12
+ Page size:         4096
+ Processor type:         8664
+ Minimum application address:         10000
+ Maximum application address:         fffeffff
+ Active processor mask:         4095
+ Nsocket:         1
+ Ncore:           6  ( 1 X 6 )
+ HyperThreading:  On
+ Ram:          16253 Mb
+ ==================================================
+ Time Summary                 CPU       Wall   ( Time in Seconds )
+ Consider using SOLVE=AUTO if you have not.
+ =====================================================
+ Detailed performance information can be found in the 
+ "MSC Nastran High Performance Computing User's Guide"
+ =====================================================
+MSC Nastran finished Thu Mar  7 13:12:32 RST 2024 
