@@ -23,6 +23,8 @@ LOAD = 2  $ Call SID=2 loads only for SUBCASE 2
 
 BEGIN BULK
 PARAM, POST, -1
+mdlprm, hdf5, 1
+PARAM, GRDPNT, 1
 $------><--ID--><--CP--><--X1--><--X2--><--X3--><------><------><------><------>
 GRID          1            0.      0.      0.
 GRID          2           50.      0.      0.

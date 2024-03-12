@@ -26,7 +26,7 @@
                                               * *          SEP 18, 2019           * *
                                               * *                                 * *
                                               * *              Intel              * *
-                                              * * MODEL Xeon/6900 (ESEIAAT-18-9)  * *
+                                              * * MODEL Xeon/2950 (ESEIAAT-22-43) * *
                                               * * Windows 10 Enterprise 6.2 9200  * *
                                               * * Compiled for 8664 (SINGLE Mode) * *
                                               * *                                 * *
@@ -152,7 +152,7 @@
   
       http://www.mscsoftware.com/Contents/Services/Training/
   
-1                                                                             MARCH   7, 2024  MSC Nastran  9/18/19   PAGE     1
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE     1
                                                                                                                                     
 0        N A S T R A N    F I L E    A N D    S Y S T E M    P A R A M E T E R    E C H O                                           
 0                                                                                                                                   
@@ -164,7 +164,7 @@
      $                                                                               
      $ EXECUTIVE CONTROL DECK                                                        
      $                                                                               
-1                                                                             MARCH   7, 2024  MSC Nastran  9/18/19   PAGE     2
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE     2
                                                                                                                                     
 0        N A S T R A N    E X E C U T I V E    C O N T R O L    E C H O                                                             
 0                                                                                                                                   
@@ -172,7 +172,7 @@
                                                                                                                                     
      SOL 101 $ LINEAR STATIC SOLUTION                                                        
      CEND                                                                                    
-1                                                                             MARCH   7, 2024  MSC Nastran  9/18/19   PAGE     3
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE     3
                                                                                                                                     
 0                                                                                                                                   
 0                                        C A S E    C O N T R O L    E C H O                                                        
@@ -197,7 +197,7 @@
                  17      LOAD = 2  $ CALL SID=2 LOADS ONLY FOR SUBCASE 2                                         
                  18                                                                                              
                  19      BEGIN BULK                                                                              
-1                                                                             MARCH   7, 2024  MSC Nastran  9/18/19   PAGE     4
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE     4
                                                                                                                                     
 0                                                                                                                                   
                                                   S O R T E D   B U L K   D A T A   E C H O                                         
@@ -239,23 +239,25 @@
                    34-        GRID    12              165.    165.    0.
                    35-        MAT1    1       68000.          .3      2.6990-9
                    36-        MAT1    2       210000.         .3      7.85E-09
-                   37-        PARAM   POST    -1
-                   38-        PROD    1       1       176.714 0.
-                   39-        PROD    2       2       400.    0.
-                   40-        PROD    3       2       19.635  0.
-                   41-        SPC     1       1       123     0.
-                   42-        SPC     1       2       123     0.
-                   43-        SPC     1       3       123     0.
-                              ENDDATA
-                        TOTAL COUNT= 44
-1                                                                             MARCH   7, 2024  MSC Nastran  9/18/19   PAGE     5
+                   37-        MDLPRM  HDF5    1
+                   38-        PARAM   GRDPNT  1
+                   39-        PARAM   POST    -1
+                   40-        PROD    1       1       176.714 0.
+                   41-        PROD    2       2       400.    0.
+                   42-        PROD    3       2       19.635  0.
+                   43-        SPC     1       1       123     0.
+                   44-        SPC     1       2       123     0.
+                   45-        SPC     1       3       123     0.
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE     5
                                                                                                                                     
 0                                                                                                                                   
                                                   S O R T E D   B U L K   D A T A   E C H O                                         
                  ENTRY                                                                                                              
                  COUNT        .   1  ..   2  ..   3  ..   4  ..   5  ..   6  ..   7  ..   8  ..   9  ..  10  .                      
-                              INPUT BULK DATA ENTRY COUNT = 49
-1                                                                             MARCH   7, 2024  MSC Nastran  9/18/19   PAGE     6
+                              ENDDATA
+                        TOTAL COUNT= 46
+                              INPUT BULK DATA ENTRY COUNT = 51
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE     6
                                                                                                                                     
 0                                                                                                                                   
                                         M O D E L   S U M M A R Y          BULK = 0
@@ -266,7 +268,8 @@
                                          GRAV                        1
                                          GRID                       12
                                          MAT1                        2
-                                        PARAM                        1
+                                       MDLPRM                        1
+                                        PARAM                        2
                                          PROD                        3
                                           SPC                        3
 
@@ -302,7 +305,7 @@
      (MAXIMUM SIZE OF FORTRAN RECORDS WRITTEN =          10 WORDS.)
            (NUMBER OF FORTRAN RECORDS WRITTEN =          25 RECORDS.)
            (TOTAL DATA WRITTEN FOR DATA BLOCK =          55 WORDS.)
-1                                                                             MARCH   7, 2024  MSC Nastran  9/18/19   PAGE     7
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE     7
                                                                                                                                     
 0                                                                                                                                   
 0                                                                                                                                   
@@ -333,6 +336,14 @@
            (NUMBER OF FORTRAN RECORDS WRITTEN =          20 RECORDS.)
            (TOTAL DATA WRITTEN FOR DATA BLOCK =          58 WORDS.)
  *** USER INFORMATION MESSAGE 4114 (OUTPX2)
+     DATA BLOCK EDTS     WRITTEN ON FORTRAN UNIT    12 IN BINARY (LTLEND) FORMAT USING NDDL DESCRIPTION FOR EDT, TRL =
+                    105                 0                 0                 0                 0                 0                 4
+     NAME OF DATA BLOCK WRITTEN ON FORTRAN UNIT IS EDT     
+        (MAXIMUM POSSIBLE FORTRAN RECORD SIZE =       65538 WORDS.)
+     (MAXIMUM SIZE OF FORTRAN RECORDS WRITTEN =           7 WORDS.)
+           (NUMBER OF FORTRAN RECORDS WRITTEN =          20 RECORDS.)
+           (TOTAL DATA WRITTEN FOR DATA BLOCK =          37 WORDS.)
+ *** USER INFORMATION MESSAGE 4114 (OUTPX2)
      DATA BLOCK CASES    WRITTEN ON FORTRAN UNIT    12 IN BINARY (LTLEND) FORMAT USING NDDL DESCRIPTION FOR CASECC, TRL =
                     101                 2                 0              1000                 0                 0                 0
      NAME OF DATA BLOCK WRITTEN ON FORTRAN UNIT IS CASECC  
@@ -340,13 +351,78 @@
      (MAXIMUM SIZE OF FORTRAN RECORDS WRITTEN =        1000 WORDS.)
            (NUMBER OF FORTRAN RECORDS WRITTEN =          20 RECORDS.)
            (TOTAL DATA WRITTEN FOR DATA BLOCK =        2028 WORDS.)
-1                                                                             MARCH   7, 2024  MSC Nastran  9/18/19   PAGE     8
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK PVT, TRAILER[101, 8, 0, 0, 0, 0, 0])
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK CASECC, TRAILER[102, 2, 0, 1000, 0, 0, 0])
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK GEOM1Q, TRAILER[101, 0, 0, 8, 0, 0, 0])
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK EPT, TRAILER[101, 128, 0, 0, 0, 0, 0])
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK MPT, TRAILER[102, 32768, 0, 0, 0, 0, 0])
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK GEOM2, TRAILER[103, 0, 4, 0, 0, 0, 0])
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK GEOM3S, TRAILER[104, 0, 0, 80, 0, 0, 0])
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (DATA BLOCK GEOM3S IS NOT SUPPORTED)
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK GEOM4S, TRAILER[105, 0, 0, 0, 512, 0, 0])
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (DATA BLOCK GEOM4S IS NOT SUPPORTED)
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK GEOM1, TRAILER[101, 0, 0, 8, 0, 0, 0])
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK EDT, TRAILER[103, 0, 0, 0, 0, 0, 4])
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK GEOM3, TRAILER[101, 0, 0, 80, 0, 0, 0])
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeInput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK GEOM4, TRAILER[102, 0, 0, 0, 512, 0, 0])
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE     8
                                                                                                                                     
 0                                                                                                                                   
- *** USER INFORMATION MESSAGE 7310 (VECPRN)
-     ORIGIN OF SUPERELEMENT OR MODULE BASIC COORDINATE SYSTEM WILL BE USED AS REFERENCE LOCATION.
-     RESULTANTS ABOUT ORIGIN OF SUPERELEMENT OR MODULE BASIC COORDINATE SYSTEM IN SUPERELEMENT OR MODULE
-     BASIC SYSTEM COORDINATES.
+                           O U T P U T   F R O M   G R I D   P O I N T   W E I G H T   G E N E R A T O R
+0                                                     REFERENCE POINT =        1
+                                                                M O
+                      *  1.946498E-03  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00 -2.187584E-01 *
+                      *  0.000000E+00  1.946498E-03  0.000000E+00  0.000000E+00  0.000000E+00  1.559327E-01 *
+                      *  0.000000E+00  0.000000E+00  1.946498E-03  2.187584E-01 -1.559327E-01  0.000000E+00 *
+                      *  0.000000E+00  0.000000E+00  2.187584E-01  3.096557E+01 -1.962482E+01  0.000000E+00 *
+                      *  0.000000E+00  0.000000E+00 -1.559327E-01 -1.962482E+01  1.526072E+01  0.000000E+00 *
+                      * -2.187584E-01  1.559327E-01  0.000000E+00  0.000000E+00  0.000000E+00  4.622629E+01 *
+                                                                 S
+                                           *  1.000000E+00  0.000000E+00  0.000000E+00 *
+                                           *  0.000000E+00  1.000000E+00  0.000000E+00 *
+                                           *  0.000000E+00  0.000000E+00  1.000000E+00 *
+                               DIRECTION
+                          MASS AXIS SYSTEM (S)     MASS              X-C.G.        Y-C.G.        Z-C.G.
+                                  X            1.946498E-03      0.000000E+00  1.123856E+02  0.000000E+00
+                                  Y            1.946498E-03      8.010935E+01  0.000000E+00  0.000000E+00
+                                  Z            1.946498E-03      8.010935E+01  1.123856E+02  0.000000E+00
+                                                                I(S)
+                                           *  6.380269E+00  2.100227E+00  0.000000E+00 *
+                                           *  2.100227E+00  2.769057E+00  0.000000E+00 *
+                                           *  0.000000E+00  0.000000E+00  9.149326E+00 *
+                                                                I(Q)
+                                           *  7.344350E+00                             *
+                                           *                1.804976E+00               *
+                                           *                              9.149326E+00 *
+                                                                 Q
+                                           *  9.088226E-01  4.171828E-01  0.000000E+00 *
+                                           * -4.171828E-01  9.088226E-01  0.000000E+00 *
+                                           *  0.000000E+00  0.000000E+00  1.000000E+00 *
+
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE     9
+                                                                                                                                    
+0                                                                                                                                   
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeOutput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK OGPWG, TRAILER[101, 0, 0, 0, 0, 0, 1])
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE    10
+                                                                                                                                    
+0                                                                                                                                   
+0 RESULTANTS ABOUT        1 IN SUPERELEMENT BASIC SYSTEM COORDINATES.
+
 0                                                  OLOAD    RESULTANT       
   SUBCASE/    LOAD
   DAREA ID    TYPE       T1            T2            T3            R1            R2            R3
@@ -364,7 +440,7 @@
                MY       ----          ----          ----          ----       0.000000E+00     ----                                  
                MZ       ----          ----          ----          ----          ----       0.000000E+00                             
              TOTALS  0.000000E+00 -1.907568E+01  0.000000E+00  0.000000E+00  0.000000E+00 -1.528140E+03
-1                                                                             MARCH   7, 2024  MSC Nastran  9/18/19   PAGE     9
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE    11
                                                                                                                                     
 0                                                                                                            SUBCASE 1 $ DEFINITI   
 0                                         G R I D   P O I N T   S I N G U L A R I T Y   T A B L E
@@ -415,7 +491,7 @@
                                12        G      4         0.00E+00          B        F         SB       S    *
                                12        G      5         0.00E+00          B        F         SB       S    *
                                12        G      6         0.00E+00          B        F         SB       S    *
-1                                                                             MARCH   7, 2024  MSC Nastran  9/18/19   PAGE    10
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE    12
                                                                                                                                     
 0                                                                                                            SUBCASE 1 $ DEFINITI   
   
@@ -424,8 +500,8 @@
  *** USER INFORMATION MESSAGE 5293 (SSG3A)
     FOR DATA BLOCK KLL     
     LOAD SEQ. NO.             EPSILON              EXTERNAL WORK      EPSILONS LARGER THAN 0.001 ARE FLAGGED WITH ASTERISKS
-                1         -6.9698582E-15          2.0640651E+05
-                2          2.3278961E-13          2.8378642E-03
+                1          5.6193111E-14          2.0640651E+05
+                2          1.6401401E-13          2.8378642E-03
  *** USER INFORMATION MESSAGE 4114 (OUTPX2)
      DATA BLOCK OUG1     WRITTEN ON FORTRAN UNIT    12 IN BINARY (LTLEND) FORMAT USING NDDL DESCRIPTION FOR OUG1, TRL =
                     101                 0               192                 0                 0                 0                 2
@@ -436,18 +512,22 @@
            (TOTAL DATA WRITTEN FOR DATA BLOCK =         525 WORDS.)
  *** USER INFORMATION MESSAGE 4114 (OUTPX2)
      DATA BLOCK OES1X1   WRITTEN ON FORTRAN UNIT    12 IN BINARY (LTLEND) FORMAT USING NDDL DESCRIPTION FOR OES1X1, TRL =
-                    101                63                 3                 7                24                 0                 2
+                    101                63                 3                12                24                 0                 2
      NAME OF DATA BLOCK WRITTEN ON FORTRAN UNIT IS OES1X1  
         (MAXIMUM POSSIBLE FORTRAN RECORD SIZE =       65538 WORDS.)
      (MAXIMUM SIZE OF FORTRAN RECORDS WRITTEN =         146 WORDS.)
            (NUMBER OF FORTRAN RECORDS WRITTEN =          30 RECORDS.)
            (TOTAL DATA WRITTEN FOR DATA BLOCK =         533 WORDS.)
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeOutput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK OUG1, TRAILER[101, 0, 192, 0, 0, 0, 2])
+ *** USER INFORMATION MESSAGE 3 (crdb::nastran::Processor::writeOutput)
+ *** USER INFORMATION MESSAGE  (WRITE DATA BLOCK OES1X, TRAILER[101, 63, 3, 12, 24, 0, 2])
  *** USER INFORMATION MESSAGE 4110 (OUTPX2)
                                  END-OF-DATA SIMULATION ON FORTRAN UNIT    12
                                  (MAXIMUM SIZE OF FORTRAN RECORDS WRITTEN =      1 WORDS.)
                                        (NUMBER OF FORTRAN RECORDS WRITTEN =      1 RECORDS.)
                                        (TOTAL DATA WRITTEN FOR EOF MARKER =      1 WORDS.)
-1                                                                             MARCH   7, 2024  MSC Nastran  9/18/19   PAGE    11
+1                                                                             MARCH  12, 2024  MSC Nastran  9/18/19   PAGE    13
                                                                                                                                     
 0                                                                                                                                   
  * * * *  D B D I C T   P R I N T  * * * *      SUBDMAP = PRTSUM  ,  DMAP STATEMENT NO.     71
