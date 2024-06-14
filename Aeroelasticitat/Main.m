@@ -95,14 +95,15 @@ n_eigval = 5;
 
 freq = diag(sqrt(value));
 
-propertiesModes = zeros(5);
+% Mode shapes (required results)
+modeshape = zeros(5);
 
-for i = 1:n_eigval % REVISAR
-    propertiesModes(i,1) = (mode(4,i)+mode(5,i))/2;
-    propertiesModes(i,2) = (mode(4,i)-mode(5,i))/h_0;
-    propertiesModes(i,3) = (mode(1,i)-mode(2,i));
-    propertiesModes(i,4) = (mode(2,i)-propertiesModes(i,2));
-    propertiesModes(i,5) = (mode(3,i)-propertiesModes(i,2));
+for i = 1:neig
+    modeshape(i,1) = (MODES(4,i)+MODES(5,i))/2;
+    modeshape(i,2) = (MODES(4,i)-MODES(5,i))/h0;
+    modeshape(i,3) = (MODES(1,i)-MODES(2,i));
+    modeshape(i,4) = (MODES(2,i)-modeshape(i,2));
+    modeshape(i,5) = (MODES(3,i)-modeshape(i,2));
 end
 
 MODE_1 = mode(:,1);
@@ -142,29 +143,26 @@ C(2,3) = ;
 C(3,2) = ;
 C(3,3) = ;
 
+% C11 = 1*pi*c1;
+% C12 = 0;
+% C13 = 0;
+% C21 = 0;
+% C22 = -1/((c2/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c1));
+% C23 = ((1*c2)/(2*(0.75*c1-0.25*c2-x1-h0+x2)))/((c2/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c1));
+% C31 = 0;
+% C32 = ((1*c1)/(2*(0.75*c2-0.25*c1+x1+h0-x2)))/((c1/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c2));
+% C33 = -1/((c1/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c2));
 
+C = rho * C;
 
+C_calcul = zeros(3,5);
 
+C_calcul(1,1) = 1;
+C_calcul(2,2) = 1;
+C_calcul(3,3) = 1;
 
-C11 = 1*pi*c1;
-C12 = 0;
-C13 = 0;
-C21 = 0;
-C22 = -1/((c2/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c1));
-C23 = ((1*c2)/(2*(0.75*c1-0.25*c2-x1-h0+x2)))/((c2/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c1));
-C31 = 0;
-C32 = ((1*c1)/(2*(0.75*c2-0.25*c1+x1+h0-x2)))/((c1/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c2));
-C33 = -1/((c1/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c2));
+% Divergence COUPLED SYSTEM
+U_inf = 1;
 
-%U = 1;
-rho = 1.25;
-C = rho*[C11 C12 C13;
-    C21 C22 C23; 
-    C31 C32 C33];
-
-Caux = [1 0 0 0 0;
-    0 1 0 0 0;
-    0 0 1 0 0;];
-% l = rho*U^2*C*Caux;
-
-A = S*C*Caux;
+l = rho * U_inf^2 * C * C_calcul;
+A = U_inf^2 * S * C * C_calcul;
