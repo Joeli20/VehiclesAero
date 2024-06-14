@@ -98,12 +98,12 @@ freq = diag(sqrt(value));
 % Mode shapes (required results)
 modeshape = zeros(5);
 
-for i = 1:neig
-    modeshape(i,1) = (MODES(4,i)+MODES(5,i))/2;
-    modeshape(i,2) = (MODES(4,i)-MODES(5,i))/h0;
-    modeshape(i,3) = (MODES(1,i)-MODES(2,i));
-    modeshape(i,4) = (MODES(2,i)-modeshape(i,2));
-    modeshape(i,5) = (MODES(3,i)-modeshape(i,2));
+for i = 1:n_eigval
+    modeshape(i,1) = (mode(4,i) + mode(5,i))/2;
+    modeshape(i,2) = (mode(4,i) - mode(5,i))/h_0;
+    modeshape(i,3) = (mode(1,i) - mode(2,i));
+    modeshape(i,4) = (mode(2,i) - modeshape(i,2));
+    modeshape(i,5) = (mode(3,i) - modeshape(i,2));
 end
 
 MODE_1 = mode(:,1);
@@ -113,8 +113,8 @@ MODE_4 = mode(:,4);
 MODE_5 = mode(:,5);
 
 % Plotting (if needed)
-%n_mode = MODE_1;
-%plot_structure(n_mode(4),n_mode(5),n_mode(1),n_mode(2),n_mode(3));
+n_mode = MODE_1;
+plot_structure(n_mode(4),n_mode(5),n_mode(1),n_mode(2),n_mode(3));
 
 %% PART C - Aeroelastic analysis
 % Force Vector computation (matrix)
@@ -137,11 +137,11 @@ C = zeros(3,3);
 
 C(1,1) = pi * c_1;
 
-C(2,2) = ;
-C(2,3) = ;
+C(2,2) = 1;
+C(2,3) = 1;
 
-C(3,2) = ;
-C(3,3) = ;
+C(3,2) = 1;
+C(3,3) = 1;
 
 % C11 = 1*pi*c1;
 % C12 = 0;
@@ -166,3 +166,12 @@ U_inf = 1;
 
 l = rho * U_inf^2 * C * C_calcul;
 A = U_inf^2 * S * C * C_calcul;
+
+% Divergence Speed Static Cond (a)
+[mode_A,value_A] = eigs(K,A,n_eigval);
+
+U_Div_eigen = diag(sqrt(value_A));
+U_Div = real(U_Div_eigen(3));
+
+% Potential control reversal conditions (b)
+
