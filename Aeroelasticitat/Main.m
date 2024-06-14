@@ -2,7 +2,7 @@ clear all;
 close all;
 clc;
 
-% Escrit per: Joel Campo, Albert Chacón
+% Written by: Joel Campo, Albert Chacón
 % Vehicles Aeroespacials. MUEA.
 % Aeroelasticity Project
 
@@ -26,17 +26,145 @@ s   = 0.17; % m
 
 % Material
 mu  = 2.0; % kg/m^2
-K_1 = 4.0; % kN/m
-K_2 = 3.0; % kN/m
-K_3 = 4.0; % kN/m
-K_4 = 2.0; % kN/m
-K_5 = 2.5; % kN/m
+k_1 = 4000; % N/m
+k_2 = 3000; % N/m
+k_3 = 4000; % N/m
+k_4 = 2000; % N/m
+k_5 = 2500; % N/m
 
 % Others
 rho = 1.25; %kg/m^3
 
-%% PART A - Aerodynamic modelling
-
 %% PART B - Structural dynamics modelling
+% Previous calculations
+m_1 = mu * h_1 * c_1;
+m_2 = mu * h_2 * c_1;
+m_3 = mu * h_2 * c_2;
+
+Is_1 = (1/12) * m_1 * c_1^2 + m_1 * (0.5 * c_1 - x_1)^2;
+Is_2 = (1/12) * m_2 * c_1^2 + m_2 * (0.5 * c_1 - x_1)^2;
+Is_3 = (1/12) * m_3 * c_2^2 + m_3 * (0.5 * c_2 - x_2)^2;
+
+% Stiffness Matrix computation
+K = zeros(5,5);
+
+K(1,1) = k_3 * x_1^2;
+K(1,2) = -1 * (k_3 * x_1^2);
+
+K(2,1) = -1 * (k_3 * x_1^2);
+K(2,2) = k_3 * x_1^2 + k_4 * (c_1 - x_1)^2;
+K(2,4) = -1 * ((k_4/h_0) * (c_1 - x_1)^2);
+K(2,5) = (k_4/h_0) * (c_1 - x_1)^2;
+
+K(3,3) = k_5 * x_2^2;
+K(3,4) = -1 * ((k_5/h_0) * x_2^2);
+K(3,5) = (k_5/h_0) * x_2^2;
+
+K(4,2) = -1 * ((k_4/h_0) * (c_1 - x_1)^2);
+K(4,3) = -1 * ((k_5/h_0) * x_2^2);
+K(4,4) = k_1 + ((k_4/(h_0^2)) * (c_1 - x_1)^2) + ((k_5/(h_0^2)) * x_2^2);
+K(4,5) = -1 * ((k_4/(h_0^2)) * (c_1 - x_1)^2) - ((k_5/(h_0^2)) * x_2^2);
+
+K(5,2) = (k_4/h_0) * (c_1 - x_1)^2;
+K(5,3) = (k_5/h_0) * x_2^2;
+K(5,4) = -1 * ((k_4/(h_0^2)) * (c_1 - x_1)^2) - ((k_5/(h_0^2)) * x_2^2);
+K(5,5) = k_2 + ((k_4/(h_0^2)) * (c_1 - x_1)^2) + ((k_5/(h_0^2)) * x_2^2);
+
+% Mass Matrix computation
+M = zeros(5,5);
+
+M(1,1) = Is_1;
+M(1,4) = m_1 * (x_1 - c_1/2);
+
+M(2,2) = Is_2;
+M(2,4) = m_2 * (x_1 - c_1/2);
+
+M(3,3) = Is_3;
+M(3,5) = m_3 * (x_2 - c_2/2);
+
+M(4,1) = m_1 * (x_1 - c_1/2);
+M(4,2) = m_2 * (x_1 - c_1/2);
+M(4,4) = m_1 + m_2;
+
+M(5,3) = m_3 * (x_2 - c_2/2);
+M(5,5) = m_3;
+
+% EIGENVALUES COMPUTATION
+n_eigval = 5;
+[mode,value] = eigs(K,M,n_eigval);
+
+freq = diag(sqrt(value));
+
+propertiesModes = zeros(5);
+
+for i = 1:n_eigval % REVISAR
+    propertiesModes(i,1) = (mode(4,i)+mode(5,i))/2;
+    propertiesModes(i,2) = (mode(4,i)-mode(5,i))/h_0;
+    propertiesModes(i,3) = (mode(1,i)-mode(2,i));
+    propertiesModes(i,4) = (mode(2,i)-propertiesModes(i,2));
+    propertiesModes(i,5) = (mode(3,i)-propertiesModes(i,2));
+end
+
+MODE_1 = mode(:,1);
+MODE_2 = mode(:,2);
+MODE_3 = mode(:,3);
+MODE_4 = mode(:,4);
+MODE_5 = mode(:,5);
+
+% Plotting (if needed)
+%n_mode = MODE_1;
+%plot_structure(n_mode(4),n_mode(5),n_mode(1),n_mode(2),n_mode(3));
 
 %% PART C - Aeroelastic analysis
+% Force Vector computation (matrix)
+S = zeros(5,3);
+
+S(1,1) = h_1 * (x_1 - c_1/4);
+
+S(2,2) = h_2 * (x_1 - c_1/4);
+
+S(3,3) = h_2 * (x_2 - c_2/4);
+
+S(4,1) = h_1;
+S(4,2) = h_2;
+
+S(5,3) = h_2;
+
+% Aerodynamics Matrix computation
+
+C = zeros(3,3);
+
+C(1,1) = pi * c_1;
+
+C(2,2) = ;
+C(2,3) = ;
+
+C(3,2) = ;
+C(3,3) = ;
+
+
+
+
+
+C11 = 1*pi*c1;
+C12 = 0;
+C13 = 0;
+C21 = 0;
+C22 = -1/((c2/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c1));
+C23 = ((1*c2)/(2*(0.75*c1-0.25*c2-x1-h0+x2)))/((c2/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c1));
+C31 = 0;
+C32 = ((1*c1)/(2*(0.75*c2-0.25*c1+x1+h0-x2)))/((c1/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c2));
+C33 = -1/((c1/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c2));
+
+%U = 1;
+rho = 1.25;
+C = rho*[C11 C12 C13;
+    C21 C22 C23; 
+    C31 C32 C33];
+
+Caux = [1 0 0 0 0;
+    0 1 0 0 0;
+    0 0 1 0 0;];
+% l = rho*U^2*C*Caux;
+
+A = S*C*Caux;
