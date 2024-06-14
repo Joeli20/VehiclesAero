@@ -1,6 +1,7 @@
+clc;
 clear all;
 close all;
-clc;
+
 
 % Written by: Joel Campo, Albert Chacón
 % Vehicles Aeroespacials. MUEA.
@@ -113,8 +114,8 @@ MODE_4 = mode(:,4);
 MODE_5 = mode(:,5);
 
 % Plotting (if needed)
-n_mode = MODE_1;
-plot_structure(n_mode(4),n_mode(5),n_mode(1),n_mode(2),n_mode(3));
+% n_mode = MODE_1;
+% plot_structure(n_mode(4),n_mode(5),n_mode(1),n_mode(2),n_mode(3));
 
 %% PART C - Aeroelastic analysis
 % Force Vector computation (matrix)
@@ -137,41 +138,165 @@ C = zeros(3,3);
 
 C(1,1) = pi * c_1;
 
-C(2,2) = 1;
-C(2,3) = 1;
+C(2,2) = (-1)/((c_2/(4 * pi * ((3/4) * c_1 - (1/4) * c_2 - x_1 - h_0 + x_2) * ((3/4) * c_2 - (1/4) * c_1 + x_1 + h_0 - x_2))) - 1/(pi * c_1));
+C(2,3) = ((1 * c_2)/(2 * ((3/4) * c_1 - (1/4) * c_2 - x_1 - h_0 + x_2)))/((c_2/(4 * pi * ((3/4) * c_1 - (1/4) * c_2 - x_1 - h_0 + x_2) * ((3/4) * c_2 - (1/4) * c_1 + x_1 + h_0 - x_2))) - 1/(pi * c_1));
 
-C(3,2) = 1;
-C(3,3) = 1;
-
-% C11 = 1*pi*c1;
-% C12 = 0;
-% C13 = 0;
-% C21 = 0;
-% C22 = -1/((c2/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c1));
-% C23 = ((1*c2)/(2*(0.75*c1-0.25*c2-x1-h0+x2)))/((c2/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c1));
-% C31 = 0;
-% C32 = ((1*c1)/(2*(0.75*c2-0.25*c1+x1+h0-x2)))/((c1/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c2));
-% C33 = -1/((c1/(4*pi*(0.75*c1-0.25*c2-x1-h0+x2)*(0.75*c2-0.25*c1+x1+h0-x2)))-1/(pi*c2));
+C(3,2) = ((1 * c_1)/(2 * ((3/4) * c_2 - (1/4) * c_1 + x_1 + h_0 - x_2)))/((c_1/(4 * pi * ((3/4) * c_1 - (1/4) * c_2 - x_1 - h_0 + x_2) * ((3/4) * c_2 - (1/4) * c_1 + x_1 + h_0 - x_2))) - 1/(pi * c_2));
+C(3,3) = (-1)/((c_1/(4 * pi * ((3/4) * c_1 - (1/4) * c_2 - x_1 - h_0 + x_2) * ((3/4) * c_2 - (1/4) * c_1 + x_1 + h_0 - x_2))) - 1/(pi * c_2));
 
 C = rho * C;
 
-C_calcul = zeros(3,5);
+C_coupling = zeros(3,5);
 
-C_calcul(1,1) = 1;
-C_calcul(2,2) = 1;
-C_calcul(3,3) = 1;
+C_coupling(1,1) = 1;
+C_coupling(2,2) = 1;
+C_coupling(3,3) = 1;
 
 % Divergence COUPLED SYSTEM
 U_inf = 1;
 
-l = rho * U_inf^2 * C * C_calcul;
-A = U_inf^2 * S * C * C_calcul;
+l = rho * U_inf^2 * C * C_coupling;
+A = S * C * C_coupling;
 
 % Divergence Speed Static Cond (a)
-[mode_A,value_A] = eigs(K,A,n_eigval);
+[mode_A, value_A] = eigs(K,A,n_eigval);
 
-U_Div_eigen = diag(sqrt(value_A));
+U_Div_eigen = sqrt(diag(value_A));
 U_Div = real(U_Div_eigen(3));
 
 % Potential control reversal conditions (b)
+% Small calculations
+C_delta = 1.3149;
+delta_l_1 = 0.784375;
+delta_l_f = 0.530875;
+xp_delta_1 = (c_1 - 3/4 * s)/(4 - x_1);
+%xp_delta = x_1 - ((c_1 - s)/(4 * delta_l_1 + (c_1 - 3/4 * s) * delta_l_f));
+xp_delta = x_1 - ((c_1 - s)/4 * delta_l_1 + (c_1 - 3 * s/4) * delta_l_f);
 
+% Coupled System resolution
+S_delta = zeros(5,1);
+
+S_delta(1) = h_1 * xp_delta;
+S_delta(4) = h_1;
+
+f_delta = C_delta * S_delta;
+
+D_ini = zeros(1,3);
+D_ini(1) = C(1,1)/rho;
+D_ini(2) = (C(2,2) + C(2,3))/rho;
+D_ini(3) = (C(3,2) + C(3,3))/rho;
+D = D_ini * C_coupling;
+
+% Delta Lift Ratio Computation
+U_discret = 0:0.01:U_Div;
+Delta_Lift_Ratio = zeros(length(U_discret),1);
+
+for i = 1:length(U_discret)
+    Delta_Lift_Ratio(i) = 1 + (U_discret(i)^2/C_delta) * (D/(K - U_discret(i)^2 * A) * f_delta);
+end
+
+% For better plotting (calculated after the first plotting)
+U_r = [12 12]; % Matching first U_R = 0 --> Aproximately
+DeltaL_U_r = [-200 200]; % Matching final asymptote
+U_d = [U_Div U_Div];
+
+% Required plot
+figure 
+hold on
+plot(U_d, DeltaL_U_r,'--')
+plot(U_r, DeltaL_U_r,'--')
+plot(U_discret, Delta_Lift_Ratio)
+xlabel('U_{\infty}')
+ylabel('\DeltaL''/\DeltaL')
+ylim([-100 100])
+legend('U_D','U_R')
+hold off
+grid on
+
+% Flutter (c)
+
+
+
+
+
+
+
+
+
+
+
+B11 = (pi*c1^2/4)*rho;
+B22 = (pi*c1^2/4)*rho;
+B33 = (pi*c2^2/4)*rho;
+b1 = x1-c1*3/4;
+b2 = x1-c1*3/4;
+b3 = x2-c2*3/4;
+
+A0 = A;
+B0 = [b1 0 0 1 0;
+    0 b2 0 1 0;
+    0 0 b3 0 1];
+
+B1 = [B11 0 0 0 0;
+    0 B22 0 0 0;
+    0 0 B33 0 0];
+
+
+S1 = [h1*(x1-3*c1/4) S12 S13;
+    S21 h2*(x1-3*c1/4) S23;
+    S31 S32 h2*(x2-3*c2/4);
+    S41 S42 S43;
+    S51 S52 S53];
+
+
+U_range = 0:0.01:100;  
+A1 = S1*B1 - S*C*B0;
+A = zeros(10,10,length(U_range));
+B = zeros(10,10,length(U_range));
+eigsReal = zeros(10,length(U_range));
+maxRealEig = zeros(length(U_range),1);
+eigsImaginary = zeros(length(U_range),1);
+
+YPlotReal = zeros(10, length(U_range));
+YPlotIm = zeros(10, length(U_range));
+
+for i = 1:length(U_range)
+    A(1:5,1:5,i) = K-U_range(i)^2*A0;
+    A(6:10,1:5,i) = zeros(5);
+    A(1:5,6:10,i) = zeros(5);
+    A(6:10,6:10,i) = eye(5);
+    
+    B(1:5,1:5,i) = U_range(i)*A1;
+    B(6:10,1:5,i) = eye(5);
+    B(1:5,6:10,i) = -M;
+    B(6:10,6:10,i) = zeros(5);
+    
+    [MODES3, EIGENVAL3] = eig(A(:,:,i),B(:,:,i));
+    eigsReal(:,i) = real(diag(EIGENVAL3));
+    [maxRealEig(i),pos] = max(eigsReal(:,i)); 
+    diagEigen = diag(EIGENVAL3);
+%     eigsImaginary(i) = imag(diagEigen(pos));
+
+    YPlotReal(:,i) = (eigsReal(:,i)*c2)/(2*U_range(i));
+    YPlotIm(:,i) = imag(diag(EIGENVAL3))./(2*pi);
+end
+
+flutter = 6.23;
+
+figure 
+hold on
+xline(flutter,'--')
+plot(U_range,YPlotReal,'.')
+grid on
+legend('Flutter')
+xlabel('U_{\infty}')
+ylabel('p^Rc/2U_{\infty} ')
+hold off
+
+figure 
+hold on
+plot(U_range,YPlotIm,'.');
+xlabel('U_{\infty}')
+ylabel('p^I/2\pi ')
+grid on
+hold off
