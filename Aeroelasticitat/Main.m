@@ -1,5 +1,4 @@
 clc;
-clear all;
 close all;
 
 
@@ -92,7 +91,7 @@ M(5,5) = m_3;
 
 % EIGENVALUES COMPUTATION
 n_eigval = 5;
-[mode,value] = eigs(K,M,n_eigval);
+[mode_fl,value] = eigs(K,M,n_eigval);
 
 freq = diag(sqrt(value));
 
@@ -100,18 +99,18 @@ freq = diag(sqrt(value));
 modeshape = zeros(5);
 
 for i = 1:n_eigval
-    modeshape(i,1) = (mode(4,i) + mode(5,i))/2;
-    modeshape(i,2) = (mode(4,i) - mode(5,i))/h_0;
-    modeshape(i,3) = (mode(1,i) - mode(2,i));
-    modeshape(i,4) = (mode(2,i) - modeshape(i,2));
-    modeshape(i,5) = (mode(3,i) - modeshape(i,2));
+    modeshape(i,1) = (mode_fl(4,i) + mode_fl(5,i))/2;
+    modeshape(i,2) = (mode_fl(4,i) - mode_fl(5,i))/h_0;
+    modeshape(i,3) = (mode_fl(1,i) - mode_fl(2,i));
+    modeshape(i,4) = (mode_fl(2,i) - modeshape(i,2));
+    modeshape(i,5) = (mode_fl(3,i) - modeshape(i,2));
 end
 
-MODE_1 = mode(:,1);
-MODE_2 = mode(:,2);
-MODE_3 = mode(:,3);
-MODE_4 = mode(:,4);
-MODE_5 = mode(:,5);
+MODE_1 = mode_fl(:,1);
+MODE_2 = mode_fl(:,2);
+MODE_3 = mode_fl(:,3);
+MODE_4 = mode_fl(:,4);
+MODE_5 = mode_fl(:,5);
 
 % Plotting (if needed)
 % n_mode = MODE_1;
@@ -196,7 +195,7 @@ for i = 1:length(U_discret)
 end
 
 % For better plotting (calculated after the first plotting)
-U_r = [12 12]; % Matching first U_R = 0 --> Aproximately
+U_r = [12 12]; % Matching first U_r = 0 --> Aproximately
 DeltaL_U_r = [-200 200]; % Matching final asymptote
 U_d = [U_Div U_Div];
 
@@ -215,87 +214,85 @@ grid on
 
 % Flutter (c)
 
+% Inertial Damping
+B_1 = zeros(3,5);
 
+B_1(1,1) = rho * (pi * (c_1^2)/4);
+B_1(2,2) = rho * (pi * (c_1^2)/4);
+B_1(3,3) = rho * (pi * (c_2^2)/4);
 
+% Coupling Matrix
+b_0 = zeros(3,5);
 
+b_0(1,1) = x_1 - 3/4 * c_1;
+b_0(2,2) = x_1 - 3/4 * c_1;
+b_0(3,3) = x_2 - 3/4 * c_2;
+b_0(1,4) = 1;
+b_0(2,4) = 1;
+b_0(3,5) = 1;
 
+% Initial Divergence coupled system
+A_0 = A;
 
+% Flatter structural matrixes
+S_1 = S;
 
+S_1(1,1) = h_1 * (x_1 - 3/4 * c_1);
+S_1(2,2) = h_2 * (x_1 - 3/4 * c_1);
+S_1(3,3) = h_2 * (x_2 - 3/4 * c_2);
 
+A_1 = S_1 * B_1 - S * C * b_0;
 
+% Velocity sweep
+U_discret = 0:0.01:100;  
 
+A = zeros(10,10,length(U_discret));
+B = zeros(10,10,length(U_discret));
+eig_real = zeros(10,length(U_discret));
+MAX_eig_real = zeros(length(U_discret),1);
 
-B11 = (pi*c1^2/4)*rho;
-B22 = (pi*c1^2/4)*rho;
-B33 = (pi*c2^2/4)*rho;
-b1 = x1-c1*3/4;
-b2 = x1-c1*3/4;
-b3 = x2-c2*3/4;
+abs_real = zeros(10,length(U_discret));
+abs_imag = zeros(10,length(U_discret));
 
-A0 = A;
-B0 = [b1 0 0 1 0;
-    0 b2 0 1 0;
-    0 0 b3 0 1];
-
-B1 = [B11 0 0 0 0;
-    0 B22 0 0 0;
-    0 0 B33 0 0];
-
-
-S1 = [h1*(x1-3*c1/4) S12 S13;
-    S21 h2*(x1-3*c1/4) S23;
-    S31 S32 h2*(x2-3*c2/4);
-    S41 S42 S43;
-    S51 S52 S53];
-
-
-U_range = 0:0.01:100;  
-A1 = S1*B1 - S*C*B0;
-A = zeros(10,10,length(U_range));
-B = zeros(10,10,length(U_range));
-eigsReal = zeros(10,length(U_range));
-maxRealEig = zeros(length(U_range),1);
-eigsImaginary = zeros(length(U_range),1);
-
-YPlotReal = zeros(10, length(U_range));
-YPlotIm = zeros(10, length(U_range));
-
-for i = 1:length(U_range)
-    A(1:5,1:5,i) = K-U_range(i)^2*A0;
+for i = 1:length(U_discret)
+    A(1:5,1:5,i) = K - U_discret(i)^2 * A_0;
     A(6:10,1:5,i) = zeros(5);
     A(1:5,6:10,i) = zeros(5);
     A(6:10,6:10,i) = eye(5);
     
-    B(1:5,1:5,i) = U_range(i)*A1;
+    B(1:5,1:5,i) = U_discret(i) * A_1;
     B(6:10,1:5,i) = eye(5);
     B(1:5,6:10,i) = -M;
     B(6:10,6:10,i) = zeros(5);
     
-    [MODES3, EIGENVAL3] = eig(A(:,:,i),B(:,:,i));
-    eigsReal(:,i) = real(diag(EIGENVAL3));
-    [maxRealEig(i),pos] = max(eigsReal(:,i)); 
-    diagEigen = diag(EIGENVAL3);
-%     eigsImaginary(i) = imag(diagEigen(pos));
+    % Eigenvalue computation
+    [mode_fl, value_fl] = eig(A(:,:,i),B(:,:,i));
 
-    YPlotReal(:,i) = (eigsReal(:,i)*c2)/(2*U_range(i));
-    YPlotIm(:,i) = imag(diag(EIGENVAL3))./(2*pi);
+    eig_real(:,i) = real(diag(value_fl));
+    [MAX_eig_real(i),position] = max(eig_real(:,i)); 
+
+    abs_real(:,i) = (eig_real(:,i) * c_2)/(2 * U_discret(i));
+    abs_imag(:,i) = imag(diag(value_fl))./(2 * pi);
 end
 
-flutter = 6.23;
+% For better plotting (calculated after the first plotting)
+flutter = 6.23; % Matching first flutter = 0 --> Aproximately
 
+% Plotting real values
 figure 
 hold on
 xline(flutter,'--')
-plot(U_range,YPlotReal,'.')
+plot(U_discret,abs_real,'.')
 grid on
 legend('Flutter')
 xlabel('U_{\infty}')
 ylabel('p^Rc/2U_{\infty} ')
 hold off
 
+% Plotting imaginary values
 figure 
 hold on
-plot(U_range,YPlotIm,'.');
+plot(U_discret,abs_imag,'.');
 xlabel('U_{\infty}')
 ylabel('p^I/2\pi ')
 grid on
