@@ -68,7 +68,7 @@ C(3,2) = rho * double(coef2(2));
 
 coef_g1 = coeffs(gamma_1);
 coef_d = coeffs(gamma_delta);
-C_delta = 1.25 * (double(coef_g1(2)) + double(coef_d(2)));
+C_delta = rho * (double(coef_g1(2)) + double(coef_d(2)));
 
 %% PART B - Structural dynamics modelling
 % Previous calculations
